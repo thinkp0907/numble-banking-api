@@ -26,23 +26,23 @@ public class BankAccount {
     private String clientId;
 
     @Setter
-    @Column(name = "bankDiv", nullable = false)
+    @Column(name = "bank_Div", nullable = false)
     private String bankDiv;
 
     @Setter
-    @Column(name = "bankName", nullable = false)
+    @Column(name = "bank_Name", nullable = false)
     private String bankName;
 
     @Setter
-    @Column(name = "accountNumber", nullable = false)
+    @Column(name = "account_Number", nullable = false)
     private String accountNumber;
 
     @CreatedDate
-    @Column(name = "createdAt")
+    @Column(name = "created_At")
     private LocalDateTime createAt;
 
     @LastModifiedDate
-    @Column(name = "updatedAt")
+    @Column(name = "updated_At")
     private LocalDateTime updatedAt;
 
     public BankAccount(String clientId, String bankDiv, String bankName, String accountNumber) {

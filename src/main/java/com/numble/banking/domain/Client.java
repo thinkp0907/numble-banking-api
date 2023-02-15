@@ -11,7 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Entity(name = "client")
+@Entity
 @Table(name = "CLIENT")
 @Getter
 @ToString
@@ -19,35 +19,40 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "id")
     private Long id;
 
     @Setter
-    @Column(unique = true, name = "clientId", length = 15, nullable = false)
+    @Column(unique = true, name = "client_Id", length = 15, nullable = false)
     private String clientId;
 
     @Setter
-    @Column(name = "clientName", length = 50)
+    @Column(name = "client_Name", length = 50)
     private String clientName;
 
     @Setter
-    @Column(name = "clientPassword", length = 20, nullable = false)
+    @Column(name = "client_Password", length = 20, nullable = false)
     private String clientPassword;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name = "created_At")
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
+    @Column(name = "updated_At")
     private LocalDateTime updatedAt;
 
     protected Client() {
     }
 
-    public Client(String clientId, String clientName, String clientPassword) {
+    protected Client(String clientId, String clientName, String clientPassword) {
         this.clientId = clientId;
         this.clientName = clientName;
         this.clientPassword = clientPassword;
+    }
+
+    public static Client of(String clientId, String clientName, String clientPassword) {
+        return new Client(clientId, clientName, clientPassword);
     }
 
     @Override

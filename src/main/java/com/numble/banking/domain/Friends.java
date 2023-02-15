@@ -18,23 +18,23 @@ public class Friends {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, name = "friendId")
+    @Column(nullable = false, name = "friend_Id")
     private Long friendId;
 
     @Setter
-    @Column(name = "clientId", nullable = false, unique = true)
+    @Column(name = "client_Id", nullable = false, unique = true)
     private String clientId;
 
     @Setter
-    @Column(name = "friendClientId", nullable = false)
+    @Column(name = "friend_ClientId", nullable = false)
     private String friendClientId;
 
     @CreatedDate
-    @Column(name = "createdAt")
+    @Column(name = "created_At")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "updatedAt")
+    @Column(name = "updated_At")
     private LocalDateTime updatedAt;
 
     protected Friends() {
