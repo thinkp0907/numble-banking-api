@@ -23,8 +23,14 @@ public class FriendsService {
     private final ClientRepository clientRepository;
 
     @Transactional(readOnly = true)
-    public List<Friends> findFriends(String clientId) throws Exception{
-        return friendsRepository.findFriendsByClientId(clientId);
+    public List<FriendsDto> findFriends(String clientId) throws Exception{
+
+        List<Friends> friends = friendsRepository.findFriendsByClientId(clientId);
+
+        return friends.stream()
+                .map(friend -> friend.toDto(friend))
+                .toList();
+
     }
 
     public ClientDto save(String clientId, String friendClientId) {
