@@ -2,6 +2,7 @@ package com.numble.banking.controller;
 
 import com.numble.banking.domain.Friends;
 import com.numble.banking.dto.ClientDto;
+import com.numble.banking.dto.FriendsDto;
 import com.numble.banking.service.FriendsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class FriendsController {
 
 
     @GetMapping("/{clientId}")
-    public List<Friends> findFriends(@PathVariable String clientId) throws Exception {
+    public List<FriendsDto> findFriends(@PathVariable String clientId) throws Exception {
         return friendsService.findFriends(clientId);
     }
 
