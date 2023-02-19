@@ -1,4 +1,4 @@
-package com.numble.banking.numblebankingapi;
+package com.numble.banking;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
