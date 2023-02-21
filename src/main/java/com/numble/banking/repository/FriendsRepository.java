@@ -11,7 +11,5 @@ import java.util.Optional;
 @Repository
 public interface FriendsRepository extends JpaRepository<Friends, Long> {
 
-    List<Friends> findFriendsByClientId(String clientId) throws Exception;
-
-    void save(FriendsDto friendsDto);
+    List<Friends> findFriendsByClientId(String clientId);
 }

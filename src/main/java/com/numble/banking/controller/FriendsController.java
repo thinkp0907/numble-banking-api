@@ -6,6 +6,7 @@ import com.numble.banking.dto.FriendsDto;
 import com.numble.banking.service.FriendsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,21 +21,25 @@ public class FriendsController {
 
 
     @GetMapping("/{clientId}")
-    public List<FriendsDto> findFriends(@PathVariable String clientId) throws Exception {
-        return friendsService.findFriends(clientId);
+    public ResponseEntity<List<FriendsDto>> findFriends(@PathVariable String clientId) throws Exception {
+        if(friendsService.findFriends(clientId).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(friendsService.findFriends(clientId));
     }
 
     @PostMapping("/")
-    public String registerFriend(@RequestParam String clientId, String friendClientId) throws Exception {
-        String result = "";
+    public ResponseEntity<String> registerFriend(@RequestParam String clientId, String friendClientId) throws Exception {
+        String message = "";
 
         ClientDto clientDto = friendsService.save(clientId, friendClientId);
 
         if(Objects.isNull(clientDto)) {
-            result = "해당 친구 ID는 존재하지 않는 ID 입니다.";
+            message = "해당 친구 ID는 존재하지 않는 ID 입니다.";
         } else {
-            result = "성공적으로 등록되었습니다.";
+            message = "성공적으로 등록되었습니다.";
         }
-        return result;
+        return ResponseEntity.ok(message);
     }
 }
