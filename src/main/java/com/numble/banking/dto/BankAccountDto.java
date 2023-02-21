@@ -1,5 +1,6 @@
 package com.numble.banking.dto;
 
+
 import com.numble.banking.domain.BankAccount;
 
 import java.io.Serializable;
@@ -19,4 +20,5 @@ public record BankAccountDto(Long accountId, String clientId, String bankDiv, St
     public static BankAccount toEntity(BankAccountDto bankAccountDto) {
         return BankAccount.of(bankAccountDto.clientId, bankAccountDto.bankDiv, bankAccountDto.bankName, bankAccountDto.accountNumber);
     }
+
 }

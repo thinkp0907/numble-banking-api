@@ -1,16 +1,19 @@
 package com.numble.banking.domain;
 
-import com.numble.banking.dto.FriendsDto;
+
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@EqualsAndHashCode
-@NoArgsConstructor
+
 @Entity
 @Table(name = "friends")
 @Getter
@@ -38,13 +41,31 @@ public class Friends {
     @Column(name = "updated_At")
     private LocalDateTime updatedAt;
 
+
+    protected Friends() {
+    }
+
     public Friends(String clientId, String friendClientId) {
         this.clientId = clientId;
         this.friendClientId = friendClientId;
     }
 
+
     public FriendsDto toDto(Friends friends) {
         return new FriendsDto(friends.friendId ,friends.clientId, friends.friendClientId, friends.createdAt, friends.updatedAt);
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Friends friends)) return false;
+        return friendId == friends.friendId && clientId.equals(friends.clientId) && friendClientId.equals(friends.friendClientId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(friendId, clientId, friendClientId);
     }
 
 }

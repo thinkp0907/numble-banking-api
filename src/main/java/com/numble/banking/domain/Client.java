@@ -1,15 +1,18 @@
 package com.numble.banking.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@EqualsAndHashCode
-@NoArgsConstructor
 @Entity
 @Table(name = "CLIENT")
 @Getter
@@ -41,6 +44,10 @@ public class Client {
     @Column(name = "updated_At")
     private LocalDateTime updatedAt;
 
+
+    protected Client() {
+    }
+
     protected Client(String clientId, String clientName, String clientPassword) {
         this.clientId = clientId;
         this.clientName = clientName;
@@ -51,4 +58,16 @@ public class Client {
         return new Client(clientId, clientName, clientPassword);
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Client client)) return false;
+        return id == client.id && clientId.equals(client.clientId) && clientName.equals(client.clientName) && clientPassword.equals(client.clientPassword);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, clientId, clientName, clientPassword);
+    }
 }

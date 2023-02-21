@@ -1,15 +1,15 @@
 package com.numble.banking.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@EqualsAndHashCode
-@NoArgsConstructor
 @Entity
 @Table(name = "bank_account")
 @Getter
@@ -52,8 +52,25 @@ public class BankAccount {
         this.accountNumber = accountNumber;
     }
 
+
     public static BankAccount of(String clientId, String bankDiv, String bankName, String accountNumber) {
         return new BankAccount(clientId, bankDiv, bankName, accountNumber);
+    }
+
+    public BankAccount() {
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BankAccount that)) return false;
+        return accountId == that.accountId && clientId.equals(that.clientId) && bankDiv.equals(that.bankDiv) && bankName.equals(that.bankName) && accountNumber.equals(that.accountNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountId, clientId, bankDiv, bankName, accountNumber);
     }
 
 }
