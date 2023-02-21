@@ -1,5 +1,6 @@
 package com.numble.banking.domain;
 
+import com.numble.banking.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,15 +15,15 @@ import java.util.Objects;
 @Table(name = "bank_account")
 @Getter
 @ToString
-public class BankAccount {
+public class BankAccount extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, name = "accountId")
+    @Column(nullable = false, name = "account_Id")
     private Long accountId;
 
     @Setter
-    @Column(name = "clientId", nullable = false, unique = true)
+    @Column(name = "client_Id", nullable = false, unique = true)
     private String clientId;
 
     @Setter
@@ -37,13 +38,6 @@ public class BankAccount {
     @Column(name = "account_Number", nullable = false)
     private String accountNumber;
 
-    @CreatedDate
-    @Column(name = "created_At")
-    private LocalDateTime createAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_At")
-    private LocalDateTime updatedAt;
 
     public BankAccount(String clientId, String bankDiv, String bankName, String accountNumber) {
         this.clientId = clientId;
