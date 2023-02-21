@@ -1,5 +1,8 @@
 package com.numble.banking.dto;
 
+
+import com.numble.banking.domain.BankAccount;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -13,4 +16,9 @@ public record BankAccountDto(Long accountId, String clientId, String bankDiv, St
                                      LocalDateTime createAt, LocalDateTime updatedAt) {
         return new BankAccountDto(accountId, clientId, bankDiv, bankName, accountNumber, createAt, updatedAt);
     }
+
+    public static BankAccount toEntity(BankAccountDto bankAccountDto) {
+        return BankAccount.of(bankAccountDto.clientId, bankAccountDto.bankDiv, bankAccountDto.bankName, bankAccountDto.accountNumber);
+    }
+
 }

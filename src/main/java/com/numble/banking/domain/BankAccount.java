@@ -52,6 +52,11 @@ public class BankAccount {
         this.accountNumber = accountNumber;
     }
 
+
+    public static BankAccount of(String clientId, String bankDiv, String bankName, String accountNumber) {
+        return new BankAccount(clientId, bankDiv, bankName, accountNumber);
+    }
+
     public BankAccount() {
 
     }
@@ -67,4 +72,5 @@ public class BankAccount {
     public int hashCode() {
         return Objects.hash(accountId, clientId, bankDiv, bankName, accountNumber);
     }
+
 }

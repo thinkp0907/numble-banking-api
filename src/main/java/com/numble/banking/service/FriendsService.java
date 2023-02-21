@@ -23,9 +23,15 @@ public class FriendsService {
     private final ClientRepository clientRepository;
 
     @Transactional(readOnly = true)
-    public List<Friends> findFriends(String clientId) throws Exception{
-        return friendsRepository.findFriendsByClientId(clientId);
-    }
+    public List<FriendsDto> findFriends(String clientId) throws Exception{
+
+        List<Friends> friends = friendsRepository.findFriendsByClientId(clientId);
+
+        return friends.stream()
+                .map(friend -> friend.toDto(friend))
+                .toList();
+
+
 
     public ClientDto save(String clientId, String friendClientId) {
         // TODO: 친구 ID가 client 테이블에 있어야지만 등록 할 수 있게 만들어야함.

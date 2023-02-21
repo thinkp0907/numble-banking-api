@@ -18,4 +18,9 @@ public record ClientDto(Long id, String clientId, String clientName, String clie
         return new ClientDto(id, clientId, clientName, clientPassword, createdAt, updatedAt);
     }
 
+
+    public static Client toEntity(ClientDto clientDto) {
+        return Client.of(clientDto.clientId, clientDto.clientName, clientDto.clientPassword);
+    }
+
 }

@@ -1,10 +1,12 @@
 package com.numble.banking.domain;
 
 import jakarta.persistence.*;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -42,6 +44,7 @@ public class Client {
     @Column(name = "updated_At")
     private LocalDateTime updatedAt;
 
+
     protected Client() {
     }
 
@@ -54,6 +57,7 @@ public class Client {
     public static Client of(String clientId, String clientName, String clientPassword) {
         return new Client(clientId, clientName, clientPassword);
     }
+
 
     @Override
     public boolean equals(Object o) {

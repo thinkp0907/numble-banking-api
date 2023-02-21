@@ -1,14 +1,18 @@
 package com.numble.banking.domain;
 
+
+import jakarta.persistence.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+
 
 @Entity
 @Table(name = "friends")
@@ -37,6 +41,7 @@ public class Friends {
     @Column(name = "updated_At")
     private LocalDateTime updatedAt;
 
+
     protected Friends() {
     }
 
@@ -44,6 +49,12 @@ public class Friends {
         this.clientId = clientId;
         this.friendClientId = friendClientId;
     }
+
+
+    public FriendsDto toDto(Friends friends) {
+        return new FriendsDto(friends.friendId ,friends.clientId, friends.friendClientId, friends.createdAt, friends.updatedAt);
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -56,4 +67,5 @@ public class Friends {
     public int hashCode() {
         return Objects.hash(friendId, clientId, friendClientId);
     }
+
 }
