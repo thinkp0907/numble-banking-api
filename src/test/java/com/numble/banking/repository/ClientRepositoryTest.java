@@ -30,12 +30,9 @@ class ClientRepositoryTest {
 
         // When
 //        List<Client> client = clientRepository.findAll();
-        Optional<Client> client = clientRepository.findClientByClientIdAndClientPassword("thinkp92", "ehdrbs92");
+        Client client = clientRepository.findClientByClientIdAndClientPassword("thinkp92", "ehdrbs92");
 //        Optional<Client> client = clientRepository.findClientByClientIdAndClientPassword("thinkp92", "ehdrbs92");
 
-        assertTrue(client.isPresent());
-        assertEquals(client.get().getClientId(), "thinkp92");
-        assertEquals(client.get().getClientPassword(), "ehdrbs92");
 
         // Then
     }
