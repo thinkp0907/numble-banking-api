@@ -11,8 +11,10 @@ import java.util.Optional;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
-    Optional<Client> findClientByClientIdAndClientPassword(String clientId, String clientPassword);
+    Client findClientByClientIdAndClientPassword(String clientId, String clientPassword);
 
     ClientDto findClientByClientId(String friendClientId);
+
+    boolean existsByClientId(String clientId);
 
 }
