@@ -2,14 +2,14 @@ package com.numble.banking.domain;
 
 import com.numble.banking.common.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
-@EqualsAndHashCode
 @NoArgsConstructor
 @Entity
 @Table(name = "bank_account")
@@ -38,16 +38,45 @@ public class BankAccount extends BaseTimeEntity {
     @Column(name = "account_Number", nullable = false)
     private String accountNumber;
 
+    @Setter
+    @Column(name = "amount", nullable = false)
+    private Long amount;
 
-    public BankAccount(String clientId, String bankDiv, String bankName, String accountNumber) {
+
+    public BankAccount(String clientId, String bankDiv, String bankName, String accountNumber, Long amount) {
         this.clientId = clientId;
         this.bankDiv = bankDiv;
         this.bankName = bankName;
         this.accountNumber = accountNumber;
+        this.amount = amount;
     }
 
-    public static BankAccount of(String clientId, String bankDiv, String bankName, String accountNumber) {
-        return new BankAccount(clientId, bankDiv, bankName, accountNumber);
+    public BankAccount(Long accountId, String clientId, String bankDiv, String bankName, String accountNumber, Long amount) {
+        this.accountId = accountId;
+        this.clientId = clientId;
+        this.bankDiv = bankDiv;
+        this.bankName = bankName;
+        this.accountNumber = accountNumber;
+        this.amount = amount;
     }
 
+    public static BankAccount of(Long accountId, String clientId, String bankDiv, String bankName, String accountNumber, Long amount) {
+        return new BankAccount(accountId, clientId, bankDiv, bankName, accountNumber, amount);
+    }
+    public static BankAccount of(String clientId, String bankDiv, String bankName, String accountNumber, Long amount) {
+        return new BankAccount(clientId, bankDiv, bankName, accountNumber, amount);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        BankAccount that = (BankAccount) o;
+        return accountId != null && Objects.equals(accountId, that.accountId);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
