@@ -19,10 +19,11 @@ import java.util.List;
 public class BankAccountService {
 
     private final BankAccountRepository bankAccountRepository;
-
-    private final TransferService transferService;
-
     private final FriendsRepository friendsRepository;
+    private final TransferService transferService;
+    private final NumbleAlarmService numbleAlarmService;
+
+
 
 
     public List<BankAccountDto> getMyAccounts(ClientDto clientDto) {
@@ -41,7 +42,7 @@ public class BankAccountService {
             return null;
     }
 
-    public boolean  sendMoney (ClientDto clientDto, BankAccountDto myAccount, BankAccountDto friendAccount, Long amount) {
+    public void  sendMoney (ClientDto clientDto, BankAccountDto myAccount, BankAccountDto friendAccount, Long amount) {
         boolean isSuccess = false;
         boolean isFriend = false;
         boolean isEnoughMoney = false;
@@ -65,7 +66,11 @@ public class BankAccountService {
             );
         }
 
-        return isSuccess;
+        if(isSuccess) {
+            numbleAlarmService.notify(clientDto, "이체가 정상적으로 완료되었습니다.");
+        } else {
+            numbleAlarmService.notify(clientDto, "이체에 실패하였습니다.");
+        }
     }
 
 

@@ -17,9 +17,6 @@ public class BankAccountController {
 
     private final BankAccountService bankAccountService;
 
-    private final NumbleAlarmService numbleAlarmService;
-
-
     @GetMapping("/{clientId}")
     public List<BankAccountDto> getMyAccounts(@RequestBody ClientDto clientDto) {
         return bankAccountService.getMyAccounts(clientDto);
@@ -34,17 +31,8 @@ public class BankAccountController {
     }
 
     @PostMapping("/sendMoney")
-    public ResponseEntity<String> sendMoney(@RequestBody ClientDto clientDto, BankAccountDto myBankAccount, BankAccountDto friendBankAccount, Long amount) {
-        boolean isSuccess = bankAccountService.sendMoney(clientDto, myBankAccount, friendBankAccount, amount);
-
-        if(isSuccess) {
-            numbleAlarmService.notify(clientDto, "이체가 정상적으로 완료되었습니다.");
-            return ResponseEntity.ok("이체가 정상적으로 완료되었습니다.");
-        } else {
-            numbleAlarmService.notify(clientDto, "이체에 실패하였습니다.");
-        }
-        return ResponseEntity.internalServerError().build();
-
+    public void sendMoney(@RequestBody ClientDto clientDto, BankAccountDto myBankAccount, BankAccountDto friendBankAccount, Long amount) {
+        bankAccountService.sendMoney(clientDto, myBankAccount, friendBankAccount, amount);
     }
 
 }
