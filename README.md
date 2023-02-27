@@ -36,4 +36,37 @@
 - 송금 및 알람 관련 구조도
 
 
+### 테스트 결과
 
+- 회원가입 API
+    - Controller 테스트
+        - 이미 가입된 ID 이면 실패 - O
+        - 신규 가입 - X
+    - Service 테스트
+        - 신규 회원가입시 정상동작 - O
+        - 이미 등록된 ID 일 경우 실패 - X
+    - Repository 테스트
+        - 등록된 ID, 비밀번호 입력시 정상적으로 조회 - O
+        - 등록되지 않은 ID, 비밀번호 입력시 null - O
+        - 정상적인 ID, PW, 이름을 입력하면 회원가입 완료 - O
+    - 테스트 진행시 문제점
+        - 각각의 테스트 진행시, JpaAuditingConfig 때문에 문제가 발생한다
+
+- 친구 추가 API & 내 친구 목록 조회 API
+    - Controller 테스트
+        - 이미 가입된 ID 이면 실패 - O
+        - 신규 가입 - X
+    - Service 테스트
+        - 신규 회원가입시 정상동작 - O
+        - 이미 등록된 ID 일 경우 실패 - X
+    - Repository 테스트
+        - 등록된 ID, 비밀번호 입력시 정상적으로 조회 - O
+        - 등록되지 않은 ID, 비밀번호 입력시 null - O
+        - 정상적인 ID, PW, 이름을 입력하면 회원가입 완료 - O
+    - 테스트 진행시 문제점
+        - Controller 테스트에서 문제 발생
+            > Caused by: org.mockito.exceptions.base.MockitoException: 
+            > Cannot mock/spy class org.springframework.test.web.servlet.MockMvc
+            - record class로 작성된 Friends 객체를 모킹하려고 할때 record class는 불변 데이터 객체이기 때문에 모킹이 되지 않는 것이 문제
+            - Mockito inline 의존성을 추가하기
+                - testImplementation("org.mockito:mockito-inline:4.9.0")
