@@ -63,7 +63,6 @@
         - 친구 추가 하기 - X
     - Repository 테스트
         - 내 친구 목록 조회 - O
-        - Client 가 아닌 친구 등록 시 null - O
         - 친구 추가 하기 - O
     - 테스트 진행시 문제점
         - Controller 테스트에서 문제 발생
