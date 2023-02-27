@@ -54,15 +54,17 @@
 
 - 친구 추가 API & 내 친구 목록 조회 API
     - Controller 테스트
-        - 이미 가입된 ID 이면 실패 - O
-        - 신규 가입 - X
+        - 내 친구 목록 조회 - X
+        - Client 가 아닌 친구 등록 시 null - X
+        - 친구 추가 하기 - X
     - Service 테스트
-        - 신규 회원가입시 정상동작 - O
-        - 이미 등록된 ID 일 경우 실패 - X
+        - 내 친구 목록 조회 - O
+        - Client 가 아닌 친구 등록 시 null - O
+        - 친구 추가 하기 - X
     - Repository 테스트
-        - 등록된 ID, 비밀번호 입력시 정상적으로 조회 - O
-        - 등록되지 않은 ID, 비밀번호 입력시 null - O
-        - 정상적인 ID, PW, 이름을 입력하면 회원가입 완료 - O
+        - 내 친구 목록 조회 - O
+        - Client 가 아닌 친구 등록 시 null - O
+        - 친구 추가 하기 - O
     - 테스트 진행시 문제점
         - Controller 테스트에서 문제 발생
             > Caused by: org.mockito.exceptions.base.MockitoException: 
@@ -70,3 +72,5 @@
             - record class로 작성된 Friends 객체를 모킹하려고 할때 record class는 불변 데이터 객체이기 때문에 모킹이 되지 않는 것이 문제
             - Mockito inline 의존성을 추가하기
                 - testImplementation("org.mockito:mockito-inline:4.9.0")
+        - Repository 테스트에서 문제 발생
+            - @EnableJpaAuditing 분기 처리한 것 원복 시켜줘야함.
