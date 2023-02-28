@@ -73,3 +73,8 @@
                 - testImplementation("org.mockito:mockito-inline:4.9.0")
         - Repository 테스트에서 문제 발생
             - @EnableJpaAuditing 분기 처리한 것 원복 시켜줘야함.
+- 계좌 이체 API
+    - Controller 테스트
+    - Service 테스트
+    - Repository 테스트
+    - 테스트 진행시 문제점
