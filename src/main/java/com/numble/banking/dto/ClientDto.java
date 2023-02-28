@@ -8,26 +8,21 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 public record ClientDto(
-        Long id,
         String clientId,
         String clientName,
         String clientPassword,
-        String clientEmail,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt) {
+        String clientEmail) {
 
-
-    public static ClientDto of(Long id, String clientId, String clientName, String clientPassword, String clientEmail, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        return new ClientDto(id, clientId, clientName, clientPassword, clientEmail, createdAt, updatedAt);
-    }
 
     public static ClientDto of(String clientId, String clientName, String clientPassword, String clientEmail) {
-        return new ClientDto(null, clientId, clientName, clientPassword, clientEmail, null, null);
+        return new ClientDto(clientId, clientName, clientPassword, clientEmail);
     }
-
 
     public static Client toEntity(ClientDto clientDto) {
         return Client.of(clientDto.clientId, clientDto.clientName, clientDto.clientPassword, clientDto.clientEmail);
     }
 
+    public static ClientDto toDto(Client client) {
+        return ClientDto.of(client.getClientId(), client.getClientName(), client.getClientPassword(), client.getClientEmail());
+    }
 }
