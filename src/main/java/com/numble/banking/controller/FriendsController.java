@@ -3,8 +3,11 @@ package com.numble.banking.controller;
 import com.numble.banking.domain.Friends;
 import com.numble.banking.dto.ClientDto;
 import com.numble.banking.dto.FriendsDto;
+import com.numble.banking.service.ClientService;
 import com.numble.banking.service.FriendsService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,20 +20,25 @@ import java.util.Objects;
 @RequestMapping("/friends")
 public class FriendsController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(FriendsController.class);
+
     private final FriendsService friendsService;
 
 
-    @GetMapping("/{clientId}")
-    public ResponseEntity<List<FriendsDto>> findFriends(@PathVariable String clientId) throws Exception {
-        if(friendsService.findFriends(clientId).isEmpty()) {
+    @GetMapping("/")
+    public ResponseEntity<List<FriendsDto>> findFriends(@RequestBody ClientDto clientDto) {
+        List<FriendsDto> FriendsDto = friendsService.findFriends(clientDto.clientId());
+        FriendsDto.forEach(friendsDto -> LOGGER.info(friendsDto.toString()));
+
+        if(friendsService.findFriends(clientDto.clientId()).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(friendsService.findFriends(clientId));
+        return ResponseEntity.ok(friendsService.findFriends(clientDto.clientId()));
     }
 
-    @PostMapping("/")
-    public ResponseEntity<String> registerFriend(@RequestParam String clientId, String friendClientId) throws Exception {
+    @PostMapping("/friends")
+    public ResponseEntity<String> registerFriend(@RequestParam String clientId, String friendClientId) {
         String message = "";
 
         ClientDto clientDto = friendsService.save(clientId, friendClientId);
