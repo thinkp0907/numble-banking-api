@@ -27,10 +27,11 @@ class BankAccountRepositoryTest {
         // When
         List<BankAccount> bankAccountList = bankAccountRepository.findBankAccountsByClientId(clientId);
         // Then
-        bankAccountList.stream()
-                .findFirst()
-                .map(BankAccount::getClientId)
-                .equals("thinkp92")
-                ;
+
+        assertFalse(bankAccountList.isEmpty());
+        assertNotNull(bankAccountList);
+
+        bankAccountList.forEach(bankAccount -> assertEquals(bankAccount.getClientId(), clientId));
+
     }
 }

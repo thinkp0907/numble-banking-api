@@ -2,6 +2,8 @@ package com.numble.banking.service;
 
 import com.numble.banking.domain.Client;
 import com.numble.banking.dto.ClientDto;
+import com.numble.banking.exception.DuplicatedClientIdException;
+import com.numble.banking.exception.ErrorCode;
 import com.numble.banking.repository.ClientRepository;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +21,19 @@ public class ClientService {
 
     private final ClientRepository clientRepository;
 
-    public String register(ClientDto clientDto) {
-        String resultMessage = "이미 존재하는 ID 입니다.";
+    public ClientDto register(ClientDto clientDto) {
+        ClientDto returnDto = null;
 
         boolean isExists = clientRepository.existsByClientId(clientDto.clientId());
 
         if(!isExists) {
-            clientRepository.save(ClientDto.toEntity(clientDto));
-            resultMessage = "회원가입이 완료되었습니다.";
+            Client client = clientRepository.save(ClientDto.toEntity(clientDto));
+            returnDto = ClientDto.toDto(client);
+        } else {
+            throw new DuplicatedClientIdException(ErrorCode.DUPLICATED_CLIENT_ID);
         }
 
-        return resultMessage;
+        return returnDto;
     }
 
 
