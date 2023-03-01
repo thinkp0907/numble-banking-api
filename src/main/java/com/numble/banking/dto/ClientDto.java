@@ -18,6 +18,7 @@ public record ClientDto(
         return new ClientDto(clientId, clientName, clientPassword, clientEmail);
     }
 
+
     public static Client toEntity(ClientDto clientDto) {
         return Client.of(clientDto.clientId, clientDto.clientName, clientDto.clientPassword, clientDto.clientEmail);
     }

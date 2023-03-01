@@ -32,7 +32,7 @@ public class FriendsService {
                 .map(friend -> FriendsDto.of(friend.getClientId(),friend.getFriendClientId(),friend.getFriendName(), friend.getFriendEmail()))
                 .toList();
 
-    }
+
 
     public ClientDto save(String clientId, String friendClientId) {
         ClientDto clientDto = null;

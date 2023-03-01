@@ -1,5 +1,6 @@
 package com.numble.banking.dto;
 
+
 import com.numble.banking.domain.BankAccount;
 
 import java.io.Serializable;
@@ -33,4 +34,5 @@ public record BankAccountDto(Long accountId, String clientId, String bankDiv, St
                 bankAccountDto.accountNumber,
                 bankAccountDto.amount);
     }
+
 }

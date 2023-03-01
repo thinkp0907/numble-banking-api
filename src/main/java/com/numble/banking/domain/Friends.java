@@ -45,7 +45,6 @@ public class Friends extends BaseTimeEntity {
         this.friendName = friendName;
         this.friendEmail = friendEmail;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
