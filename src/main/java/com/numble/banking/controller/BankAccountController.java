@@ -17,12 +17,12 @@ public class BankAccountController {
 
     private final BankAccountService bankAccountService;
 
-    @GetMapping("/{clientId}")
+    @GetMapping("/")
     public List<BankAccountDto> getMyAccounts(@RequestBody ClientDto clientDto) {
         return bankAccountService.getMyAccounts(clientDto);
     }
 
-    @GetMapping("/{clientId}/transferTo")
+    @GetMapping("/transferTo")
     public ResponseEntity<BankAccountDto> getBankAccountToSend(@RequestBody BankAccountDto bankAccountDto) {
         BankAccountDto accountDto = bankAccountService.getBankAccountToSend(bankAccountDto);
         if (accountDto != null)
@@ -31,8 +31,12 @@ public class BankAccountController {
     }
 
     @PostMapping("/sendMoney")
-    public void sendMoney(@RequestBody ClientDto clientDto, BankAccountDto myBankAccount, BankAccountDto friendBankAccount, Long amount) {
-        bankAccountService.sendMoney(clientDto, myBankAccount, friendBankAccount, amount);
+    public void sendMoney(@RequestBody ClientDto clientDto, BankAccountDto myBankAccount, BankAccountDto friendBankAccount, Long amount) throws Exception {
+        try {
+            bankAccountService.sendMoney(clientDto, myBankAccount, friendBankAccount, amount);
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
     }
 
 }

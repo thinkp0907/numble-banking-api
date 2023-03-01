@@ -1,12 +1,15 @@
 package com.numble.banking.service;
 
 import com.numble.banking.dto.BankAccountDto;
+import com.numble.banking.exception.ErrorCode;
+import com.numble.banking.handler.GlobalExceptionHandler;
 import com.numble.banking.repository.BankAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.sql.SQLException;
 
@@ -20,9 +23,9 @@ public class TransferService {
     private final BankAccountRepository bankAccountRepository;
 
     @Transactional
-    public boolean makeTransfer(BankAccountDto myAccount, BankAccountDto friendAccount, Long transferAmount) {
+    public boolean makeTransfer(BankAccountDto myAccount, BankAccountDto friendAccount, Long transferAmount) throws Exception {
         boolean isTransferDone = false;
-
+        try {
         String clientId = myAccount.clientId();
         String bankDiv = myAccount.bankDiv();
 
@@ -47,15 +50,16 @@ public class TransferService {
                 friendAccount.amount() + transferAmount
         );
 
-        try {
+
             bankAccountRepository.save(BankAccountDto.toEntity(receiverUpdateDto));
 
             bankAccountRepository.save(BankAccountDto.toEntity(senderUpdateDto));
-
             isTransferDone = true;
         } catch (Exception e) {
-            logger.info(e.getMessage());
+            throw new Exception(e.getMessage());
         }
+
+
 
         return isTransferDone;
 

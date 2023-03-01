@@ -4,6 +4,9 @@ package com.numble.banking.service;
 import com.numble.banking.domain.BankAccount;
 import com.numble.banking.dto.BankAccountDto;
 import com.numble.banking.dto.ClientDto;
+import com.numble.banking.exception.DuplicatedClientIdException;
+import com.numble.banking.exception.ErrorCode;
+import com.numble.banking.handler.GlobalExceptionHandler;
 import com.numble.banking.repository.BankAccountRepository;
 import com.numble.banking.repository.FriendsRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +45,7 @@ public class BankAccountService {
             return null;
     }
 
-    public void  sendMoney (ClientDto clientDto, BankAccountDto myAccount, BankAccountDto friendAccount, Long amount) {
+    public void  sendMoney (ClientDto clientDto, BankAccountDto myAccount, BankAccountDto friendAccount, Long amount) throws Exception {
         boolean isSuccess = false;
         boolean isFriend = false;
         boolean isEnoughMoney = false;
@@ -59,11 +62,15 @@ public class BankAccountService {
         // 2. 보내주는 대상이 친구 이면서, 내가 충분한 돈을 가지고 있다면
         if(isFriend && isEnoughMoney) {
 
-            isSuccess = transferService.makeTransfer(
-                    myAccount,
-                    friendAccount,
-                    amount
-            );
+            try {
+                isSuccess = transferService.makeTransfer(
+                        myAccount,
+                        friendAccount,
+                        amount
+                );
+            } catch (Exception e) {
+                throw new Exception(e);
+            }
         }
 
         if(isSuccess) {

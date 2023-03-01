@@ -54,7 +54,7 @@ class RegisterControllerTest {
 
 
         // When
-        when(clientService.register(clientDto)).thenReturn("이미 존재하는 ID 입니다.");
+        when(clientService.register(clientDto)).thenReturn(clientDto);
         // Then
         mvc.perform(MockMvcRequestBuilders.post("/register")
                         .contentType(MediaType.APPLICATION_JSON)

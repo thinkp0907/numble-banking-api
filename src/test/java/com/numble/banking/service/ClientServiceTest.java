@@ -31,9 +31,9 @@ class ClientServiceTest {
         ClientDto clientDto = ClientDto.of("abc", "abc", "abc", "abc@gamil.com");
         // When
         when(clientRepository.save(any())).thenReturn(ClientDto.toEntity(clientDto));
-        String message = clientService.register(clientDto);
+        ClientDto returnClient = clientService.register(clientDto);
         // Then
-        assertEquals(message, "회원가입이 완료되었습니다.");
+        assertEquals(returnClient, clientDto);
     }
 
     @Disabled
@@ -43,11 +43,11 @@ class ClientServiceTest {
         // Given
         ClientDto clientDto = ClientDto.of("thinkp92", "chorlcok", "1234", "abc@gamil.com");
         // When
-        String message = clientService.register(clientDto);
-        assertEquals(message, "회원가입이 완료되었습니다.");
+        ClientDto returnClient = clientService.register(clientDto);
+        assertEquals(returnClient, clientDto);
 
-        String message2 = clientService.register(clientDto);
+        ClientDto returnClient2 = clientService.register(clientDto);
         // Then
-        assertEquals(message2, "이미 존재하는 ID 입니다.");
+        assertNull(returnClient2);
     }
 }
