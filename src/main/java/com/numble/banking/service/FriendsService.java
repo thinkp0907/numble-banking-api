@@ -29,9 +29,10 @@ public class FriendsService {
         List<Friends> friends = friendsRepository.findFriendsByClientId(clientId);
 
         return friends.stream()
-                .map(friend -> FriendsDto.of(friend.getClientId(),friend.getFriendClientId(),friend.getFriendName(), friend.getFriendEmail()))
+                .map(friend -> FriendsDto.of(friend.getClientId(), friend.getFriendClientId(), friend.getFriendName(), friend.getFriendEmail()))
                 .toList();
 
+    }
 
 
     public ClientDto save(String clientId, String friendClientId) {
