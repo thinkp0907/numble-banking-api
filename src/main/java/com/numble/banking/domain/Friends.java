@@ -1,24 +1,21 @@
 package com.numble.banking.domain;
 
-
-import jakarta.persistence.*;
+import com.numble.banking.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.Hibernate;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
 import java.util.Objects;
 
-
+@NoArgsConstructor
 @Entity
 @Table(name = "friends")
 @Getter
 @ToString
-public class Friends {
+public class Friends extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,42 +27,33 @@ public class Friends {
     private String clientId;
 
     @Setter
-    @Column(name = "friend_ClientId", nullable = false)
+    @Column(name = "friend_Client_Id", nullable = false)
     private String friendClientId;
 
-    @CreatedDate
-    @Column(name = "created_At")
-    private LocalDateTime createdAt;
+    @Setter
+    @Column(name = "friend_Name")
+    private String friendName;
 
-    @LastModifiedDate
-    @Column(name = "updated_At")
-    private LocalDateTime updatedAt;
+    @Setter
+    @Column(name = "friend_Email")
+    private String friendEmail;
 
 
-    protected Friends() {
-    }
-
-    public Friends(String clientId, String friendClientId) {
+    public Friends(String clientId, String friendClientId, String friendName, String friendEmail) {
         this.clientId = clientId;
         this.friendClientId = friendClientId;
+        this.friendName = friendName;
+        this.friendEmail = friendEmail;
     }
-
-
-    public FriendsDto toDto(Friends friends) {
-        return new FriendsDto(friends.friendId ,friends.clientId, friends.friendClientId, friends.createdAt, friends.updatedAt);
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Friends friends)) return false;
-        return friendId == friends.friendId && clientId.equals(friends.clientId) && friendClientId.equals(friends.friendClientId);
+        return friendId.equals(friends.friendId) && clientId.equals(friends.clientId) && friendClientId.equals(friends.friendClientId) && friendName.equals(friends.friendName) && friendEmail.equals(friends.friendEmail);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(friendId, clientId, friendClientId);
+        return Objects.hash(friendId, clientId, friendClientId, friendName, friendEmail);
     }
-
 }

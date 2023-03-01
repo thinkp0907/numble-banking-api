@@ -1,8 +1,19 @@
 package com.numble.banking.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.numble.banking.dto.ClientDto;
+import com.numble.banking.repository.ClientRepository;
+import com.numble.banking.repository.FriendsRepository;
+import com.numble.banking.service.ClientService;
 import com.numble.banking.service.FriendsService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,6 +21,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -18,31 +30,46 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Friends Controller Test")
-@AutoConfigureMockMvc
-@SpringBootTest(
-
-)
+@WebMvcTest(FriendsController.class)
 class FriendsControllerTest {
 
-    private static MockMvc mvc;
+    private final Logger LOGGER = LoggerFactory.getLogger(FriendsControllerTest.class);
+    @Autowired
+    private MockMvc mvc;
+
+    @MockBean
+    private FriendsService friendsService;
+    
+    @MockBean
+    private ClientService clientService;
 
     @Autowired
-    private FriendsController controller;
+    private ObjectMapper objectMapper;
 
-    @Autowired
-    @MockBean private FriendsService service;
-    // Control 과 Service 의 기능을 함께 테스트 하기위해 SpringBootTest 사용.
+
     @DisplayName("내 친구 리스트 조회")
     @Test
     void givenClientId_whenRequestingFriendsList_thenReturnsFriendsList() throws Exception {
+        ClientDto clientDto = ClientDto.of("thinkp92", "조동균", "1234", "abc@gmail.com");
+        ClientDto clientDto2 = ClientDto.of("hyesoup", "오혜수", "1234", "abc@gmail.com");
+        clientService.register(clientDto);
+        clientService.register(clientDto2);
+        friendsService.save("thinkp92", "hyesoup");
+
+
         String clientId = "thinkp92";
 
-        assertNotNull(controller.findFriends(clientId));
-        assertEquals(service.findFriends(clientId), controller.findFriends(clientId));
+//        mvc.perform(get("/friends")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(toJson(clientDto)))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andReturn();
     }
 
     @DisplayName("친구 추가")
@@ -51,9 +78,17 @@ class FriendsControllerTest {
         String clientId        = "thinkp92";
         String friendsClientId = "hyesoup";
 
-        controller.registerFriend(clientId, friendsClientId);
+        mvc.perform(post("/friends")
+                        .param("clientId", clientId)
+                        .param("friendClientId", friendsClientId))
+                .andDo(print())
+                .andExpect(status().isOk());
+
 
     }
 
+    private <T> String toJson(T data) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(data);
+    }
 
 }

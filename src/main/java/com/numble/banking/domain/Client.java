@@ -1,23 +1,21 @@
 package com.numble.banking.domain;
 
+import com.numble.banking.common.BaseTimeEntity;
 import jakarta.persistence.*;
-
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.Hibernate;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
 import java.util.Objects;
 
+@NoArgsConstructor
 @Entity
 @Table(name = "CLIENT")
 @Getter
 @ToString
-public class Client {
+public class Client extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,38 +34,32 @@ public class Client {
     @Column(name = "client_Password", length = 20, nullable = false)
     private String clientPassword;
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false, name = "created_At")
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_At")
-    private LocalDateTime updatedAt;
+    @Setter
+    @Column(name = "email")
+    private String clientEmail;
 
 
-    protected Client() {
-    }
-
-    protected Client(String clientId, String clientName, String clientPassword) {
+    protected Client(String clientId, String clientName, String clientPassword, String clientEmail) {
         this.clientId = clientId;
         this.clientName = clientName;
         this.clientPassword = clientPassword;
+        this.clientEmail = clientEmail;
     }
 
-    public static Client of(String clientId, String clientName, String clientPassword) {
-        return new Client(clientId, clientName, clientPassword);
+    public static Client of(String clientId, String clientName, String clientPassword, String clientEmail) {
+        return new Client(clientId, clientName, clientPassword, clientEmail);
     }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Client client)) return false;
-        return id == client.id && clientId.equals(client.clientId) && clientName.equals(client.clientName) && clientPassword.equals(client.clientPassword);
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Client client = (Client) o;
+        return id != null && Objects.equals(id, client.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, clientId, clientName, clientPassword);
+        return getClass().hashCode();
     }
 }

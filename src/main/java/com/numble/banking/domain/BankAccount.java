@@ -1,28 +1,29 @@
 package com.numble.banking.domain;
 
+import com.numble.banking.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.Hibernate;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
+@NoArgsConstructor
 @Entity
 @Table(name = "bank_account")
 @Getter
 @ToString
-public class BankAccount {
+public class BankAccount extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, name = "accountId")
+    @Column(nullable = false, name = "account_Id")
     private Long accountId;
 
     @Setter
-    @Column(name = "clientId", nullable = false, unique = true)
+    @Column(name = "client_Id", nullable = false, unique = true)
     private String clientId;
 
     @Setter
@@ -37,40 +38,45 @@ public class BankAccount {
     @Column(name = "account_Number", nullable = false)
     private String accountNumber;
 
-    @CreatedDate
-    @Column(name = "created_At")
-    private LocalDateTime createAt;
+    @Setter
+    @Column(name = "amount", nullable = false)
+    private Long amount;
 
-    @LastModifiedDate
-    @Column(name = "updated_At")
-    private LocalDateTime updatedAt;
 
-    public BankAccount(String clientId, String bankDiv, String bankName, String accountNumber) {
+    public BankAccount(String clientId, String bankDiv, String bankName, String accountNumber, Long amount) {
         this.clientId = clientId;
         this.bankDiv = bankDiv;
         this.bankName = bankName;
         this.accountNumber = accountNumber;
+        this.amount = amount;
     }
 
-
-    public static BankAccount of(String clientId, String bankDiv, String bankName, String accountNumber) {
-        return new BankAccount(clientId, bankDiv, bankName, accountNumber);
+    public BankAccount(Long accountId, String clientId, String bankDiv, String bankName, String accountNumber, Long amount) {
+        this.accountId = accountId;
+        this.clientId = clientId;
+        this.bankDiv = bankDiv;
+        this.bankName = bankName;
+        this.accountNumber = accountNumber;
+        this.amount = amount;
     }
 
-    public BankAccount() {
-
+    public static BankAccount of(Long accountId, String clientId, String bankDiv, String bankName, String accountNumber, Long amount) {
+        return new BankAccount(accountId, clientId, bankDiv, bankName, accountNumber, amount);
+    }
+    public static BankAccount of(String clientId, String bankDiv, String bankName, String accountNumber, Long amount) {
+        return new BankAccount(clientId, bankDiv, bankName, accountNumber, amount);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BankAccount that)) return false;
-        return accountId == that.accountId && clientId.equals(that.clientId) && bankDiv.equals(that.bankDiv) && bankName.equals(that.bankName) && accountNumber.equals(that.accountNumber);
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        BankAccount that = (BankAccount) o;
+        return accountId != null && Objects.equals(accountId, that.accountId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountId, clientId, bankDiv, bankName, accountNumber);
+        return getClass().hashCode();
     }
-
 }

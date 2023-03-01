@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 @DisplayName("JPA 연결 테스트")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -23,51 +24,44 @@ class ClientRepositoryTest {
     @Autowired
     private ClientRepository clientRepository;
 
-    @DisplayName("SELECT 테스트")
+    @DisplayName("등록된 ID, 비밀번호 입력시 정상적으로 조회")
     @Test
-    void given_When_Then() {
+    void givenCorrectIdAndPassword_WhenLogin_ThenSuccessfullyRetrieve() {
         // Given
-
+        String id = "thinkp92";
+        String pw = "ehdrbs92";
         // When
-//        List<Client> client = clientRepository.findAll();
-        Optional<Client> client = clientRepository.findClientByClientIdAndClientPassword("thinkp92", "ehdrbs92");
-//        Optional<Client> client = clientRepository.findClientByClientIdAndClientPassword("thinkp92", "ehdrbs92");
-
-        assertTrue(client.isPresent());
-        assertEquals(client.get().getClientId(), "thinkp92");
-        assertEquals(client.get().getClientPassword(), "ehdrbs92");
-
+        Client client = clientRepository.findClientByClientIdAndClientPassword(id, pw);
         // Then
+        assertNotEquals(client, null);
+        assertEquals(client.getClientId(), "thinkp92");
+        assertEquals(client.getClientPassword(), "ehdrbs92");
     }
 
-    @DisplayName("정상적으로 아이디 및 비밀번호 입력시 Table 조회 후 존재하면 로그인")
+    @DisplayName("등록되지 않은 ID, 비밀번호 입력시 null")
     @Test
-    void givenClientIdAndClientPassword_WhenPostingClientIdAnd_ThenInsertIntoClientTable() {
+    void givenWrongIdAndPassword_WhenLogin_ThenFailToRetrieve() {
         // Given
-
+        String id = "tdjsalk";
+        String pw = "sdlakjf";
         // When
-
+        Client client = clientRepository.findClientByClientIdAndClientPassword(id, pw);
         // Then
-    }
-
-    @DisplayName("정상적으로 아이디 및 비밀번호 입력시 로그인")
-    @Test
-    void givenRightClientIdAndClientPassword_WhenTryingToLogin_ThenLogin() {
-        // Given
-
-        // When
-
-        // Then
+        assertNull(client);
     }
 
     @DisplayName("정상적인 ID, PW, 이름을 입력하면 회원가입 완료")
     @Test
-    void givenClientIdAndClientPassword_WhenRetrievingClientId_ThenSuccess() {
+    void givenClientInfo_whenRegister_thenSuccessfullyRegister() {
         // Given
-
+        ClientDto clientDto = ClientDto.of("abc", "abc", "abc", "abc@gamil.com");
         // When
-
+        Client client = clientRepository.save(ClientDto.toEntity(clientDto));
         // Then
+        assertEquals(clientDto.clientName(), client.getClientName());
+        assertEquals(clientDto.clientEmail(), client.getClientEmail());
+        assertEquals(clientDto.clientPassword(), client.getClientPassword());
+        assertEquals(clientDto.clientId(), client.getClientId());
     }
 
 
